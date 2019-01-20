@@ -8,7 +8,6 @@ import msa.domain.core.Action
 import msa.domain.core.BaseStateMachine
 import msa.domain.core.State
 import msa.domain.entities.ChatBot
-import msa.domain.entities.GetMessagesParams
 import msa.domain.entities.Message
 import msa.domain.entities.SendMessageParams
 import msa.domain.usecase.GetChatBots
@@ -27,7 +26,7 @@ sealed class ChatAction : Action {
 
     data class ChatBotsLoadedAction(val chatBots: List<ChatBot>) : ChatAction()
 
-    data class GetMessagesAction(val getMessagesParams: GetMessagesParams) : ChatAction()
+    data class GetMessagesAction(val chatBot: ChatBot) : ChatAction()
 
     object LoadingMessages : ChatAction()
 
@@ -44,6 +43,7 @@ sealed class ChatAction : Action {
 data class ChatState(
     val loading: Boolean = false,
     val chatBots: List<ChatBot>? = null,
+    val chatBot: ChatBot? = null,
     val messages: List<Message>? = null,
     val exception: Exception? = null
 ) : State
@@ -71,6 +71,8 @@ class AppStateMachine(getChatBots: GetChatBots, getMessages: GetMessages, sendMe
     override fun reducer(state: ChatState, action: Action): ChatState {
         return when (action) {
 
+            is ChatAction.GetChatBotsAction -> state.copy(chatBot = null)
+
             is ChatAction.LoadingChatBots -> state.copy(loading = true)
 
             is ChatAction.ChatBotsLoadedAction -> state.copy(
@@ -79,7 +81,12 @@ class AppStateMachine(getChatBots: GetChatBots, getMessages: GetMessages, sendMe
                 exception = null
             )
 
-            is ChatAction.GetMessagesAction -> state.copy(loading = true, messages = null, exception = null)
+            is ChatAction.GetMessagesAction -> state.copy(
+                loading = true,
+                chatBot = action.chatBot,
+                messages = null,
+                exception = null
+            )
 
             is ChatAction.LoadingMessages -> state.copy(loading = true)
 

@@ -7,5 +7,5 @@ data class GetChatBotsParams(val getFromCache: Boolean = true)
 
 data class GetMessagesParams(val chatBotId: Int)
 
-data class SendMessageParams(val chatBotId: Int, val message: String)
+data class SendMessageParams(val chatBotId: Int = -1, val message: String)
 

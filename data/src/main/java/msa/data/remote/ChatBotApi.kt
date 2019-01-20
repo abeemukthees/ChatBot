@@ -13,8 +13,8 @@ interface ChatBotApi {
 
     @GET("chat")
     fun sendMessage(
-        @Query("apiKey") apiKey: String, @Query("messagePoko") message: String, @Query("chatBotID") chatBotId: String, @Query(
+        @Query("apiKey") apiKey: String, @Query("message") message: String, @Query("chatBotID") chatBotId: Int, @Query(
             "externalID"
-        ) externalId: Int
+        ) externalId: String
     ): Observable<ChatMessagePoko>
 }

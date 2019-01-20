@@ -21,7 +21,7 @@ import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory
 
 class DataStoreFactory(
     applicationContext: Context,
-    baseUrl: String = "http://www.personalityforge.com/api/"
+    baseUrl: String = "https://www.personalityforge.com/api/"
 ) {
 
     val inMemoryDataStore: InMemoryDataStore = InMemoryDataStore()

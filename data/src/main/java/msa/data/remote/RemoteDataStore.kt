@@ -21,15 +21,15 @@ class RemoteDataStore(private val chatBotApi: ChatBotApi) {
         return chatBotApi.sendMessage(
             apiKey = BuildConfig.API_KEY,
             message = sendMessageParams.message,
-            chatBotId = EXTERNAL_ID,
-            externalId = -1
+            chatBotId = sendMessageParams.chatBotId,
+            externalId = EXTERNAL_ID
         ).map {
 
-            if (it.success == 200) {
+            if (it.success == 1) {
 
                 val message = Message(
                     id = -1,
-                    message = it.messagePoko.message,
+                    message = it.message.message,
                     senderId = sendMessageParams.chatBotId,
                     receiverId = InMemoryDataStore.USER_ID,
                     date = Date(),

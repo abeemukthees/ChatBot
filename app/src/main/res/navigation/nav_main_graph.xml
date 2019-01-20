@@ -1,5 +1,15 @@
 <?xml version="1.0" encoding="utf-8"?>
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
-    android:id="@+id/nav_main_graph">
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:id="@+id/nav_main_graph"
+    app:startDestination="@id/chatBotsFragment">
 
+    <fragment
+        android:id="@+id/chatBotsFragment"
+        android:name="msa.chatbot.chatbots.ChatBotsFragment"
+        android:label="Chat Bots" />
+    <fragment
+        android:id="@+id/chatFragment"
+        android:name="msa.chatbot.chat.ChatFragment"
+        android:label="ChatFragment" />
 </navigation>

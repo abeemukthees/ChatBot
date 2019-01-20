@@ -15,7 +15,7 @@ import java.util.*
 class LocalDataStore(private val messageDao: MessageDao) {
 
     fun getMessages(getMessagesParams: GetMessagesParams): Observable<List<Message>> {
-        return messageDao.getMessages(getMessagesParams.chatBotId).map { TODO() }
+        return messageDao.getMessages(getMessagesParams.chatBotId).map { messages -> messages.map { transform(it) } }
     }
 
     fun insertMessage(sendMessageParams: SendMessageParams, messageStatus: MessageStatus) {
@@ -46,5 +46,17 @@ class LocalDataStore(private val messageDao: MessageDao) {
         )
 
         messageDao.insertMessage(messageEntity)
+    }
+
+    private fun transform(messageEntity: MessageEntity): Message {
+
+        return Message(
+            messageEntity.id!!,
+            receiverId = messageEntity.receiverId,
+            senderId = messageEntity.senderId,
+            message = messageEntity.message,
+            date = messageEntity.date,
+            messageStatus = messageEntity.messageStatus
+        )
     }
 }

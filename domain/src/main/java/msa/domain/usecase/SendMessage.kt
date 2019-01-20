@@ -8,6 +8,7 @@ import msa.domain.core.State
 import msa.domain.interactor.UseCase
 import msa.domain.repository.Repository
 import msa.domain.statemachine.ChatAction
+import msa.domain.statemachine.ChatState
 
 /**
  * Created by Abhi Muktheeswarar.
@@ -17,7 +18,8 @@ class SendMessage(private val repository: Repository, ioScheduler: Scheduler, co
     UseCase(ioScheduler, computationScheduler) {
 
     override fun buildUseCaseObservable(action: Action, state: State): Observable<Action> {
-        val sendMessageParams = (action as ChatAction.SendMessageAction).sendMessageParams
+        val chatBotId = (state as ChatState).chatBot!!.id
+        val sendMessageParams = (action as ChatAction.SendMessageAction).sendMessageParams.copy(chatBotId = chatBotId)
         return repository.sendMessage(sendMessageParams).map {
             it.fold({ ChatAction.MessageSentAction },
                 { exception -> ChatAction.ErrorSendingMessageAction(exception) })
@@ -25,6 +27,6 @@ class SendMessage(private val repository: Repository, ioScheduler: Scheduler, co
     }
 
     fun sendMessageSideEffect(actions: Observable<Action>, state: StateAccessor<State>): Observable<Action> =
-        actions.ofType(ChatAction.GetMessagesAction::class.java)
+        actions.ofType(ChatAction.SendMessageAction::class.java)
             .switchMap { execute(it, state()) }
 }

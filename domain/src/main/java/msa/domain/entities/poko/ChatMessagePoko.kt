@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 data class ChatMessagePoko(
     val `data`: List<Any>,
     val errorMessage: String,
-    val messagePoko: MessagePoko,
+    val message: MessagePoko,
     val success: Int
 )
 
