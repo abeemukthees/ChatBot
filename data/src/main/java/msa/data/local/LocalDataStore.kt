@@ -18,7 +18,7 @@ class LocalDataStore(private val messageDao: MessageDao) {
         return messageDao.getMessages(getMessagesParams.chatBotId).map { messages -> messages.map { transform(it) } }
     }
 
-    fun insertMessage(sendMessageParams: SendMessageParams, messageStatus: MessageStatus) {
+    fun insertMessage(sendMessageParams: SendMessageParams, messageStatus: MessageStatus): Long {
 
         val messageEntity = MessageEntity(
             chatBotId = sendMessageParams.chatBotId,
@@ -30,7 +30,23 @@ class LocalDataStore(private val messageDao: MessageDao) {
             messageStatus = messageStatus
         )
 
-        messageDao.insertMessage(messageEntity)
+        return messageDao.insertMessage(messageEntity)
+    }
+
+    fun updateMessage(sendMessageParams: SendMessageParams, messageId: Int, messageStatus: MessageStatus) {
+
+        val messageEntity = MessageEntity(
+            id = messageId,
+            chatBotId = sendMessageParams.chatBotId,
+            senderId = InMemoryDataStore.USER_ID,
+            receiverId = sendMessageParams.chatBotId,
+            message = sendMessageParams.message,
+            emotion = "",
+            date = Date(),
+            messageStatus = messageStatus
+        )
+
+        return messageDao.updateMessage(messageEntity)
     }
 
     fun insertMessage(message: Message) {
@@ -56,6 +72,7 @@ class LocalDataStore(private val messageDao: MessageDao) {
             senderId = messageEntity.senderId,
             message = messageEntity.message,
             date = messageEntity.date,
+            messageType = if (messageEntity.senderId == messageEntity.chatBotId) Message.MessageType.RECEIVED else Message.MessageType.SENT,
             messageStatus = messageEntity.messageStatus
         )
     }

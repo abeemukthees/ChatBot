@@ -21,15 +21,20 @@ class ChatRepository(private val dataStoreFactory: DataStoreFactory) : Repositor
     }
 
     override fun sendMessage(sendMessageParams: SendMessageParams): Observable<Result<Message, Exception>> {
-        return dataStoreFactory.remoteDataStore.sendMessage(sendMessageParams).doOnNext {
+        var id: Long = -1
+        return dataStoreFactory.remoteDataStore.sendMessage(sendMessageParams).doOnSubscribe {
+
+            id = dataStoreFactory.localDataStore.insertMessage(sendMessageParams, MessageStatus.SENDING)
+
+        }.doOnNext {
             it.fold({ message ->
-                dataStoreFactory.localDataStore.insertMessage(sendMessageParams, MessageStatus.SUCCESS)
+                dataStoreFactory.localDataStore.updateMessage(sendMessageParams, id.toInt(), MessageStatus.SUCCESS)
                 dataStoreFactory.localDataStore.insertMessage(message)
             },
                 { dataStoreFactory.localDataStore.insertMessage(sendMessageParams, MessageStatus.FAILURE) })
         }.doOnError {
 
-            dataStoreFactory.localDataStore.insertMessage(sendMessageParams, MessageStatus.FAILURE)
+            dataStoreFactory.localDataStore.updateMessage(sendMessageParams, id.toInt(), MessageStatus.FAILURE)
         }
     }
 }

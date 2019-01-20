@@ -71,7 +71,7 @@ class AppStateMachine(getChatBots: GetChatBots, getMessages: GetMessages, sendMe
     override fun reducer(state: ChatState, action: Action): ChatState {
         return when (action) {
 
-            is ChatAction.GetChatBotsAction -> state.copy(chatBot = null)
+            is ChatAction.GetChatBotsAction -> state.copy(chatBot = null, loading = false)
 
             is ChatAction.LoadingChatBots -> state.copy(loading = true)
 

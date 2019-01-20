@@ -33,6 +33,7 @@ class RemoteDataStore(private val chatBotApi: ChatBotApi) {
                     senderId = sendMessageParams.chatBotId,
                     receiverId = InMemoryDataStore.USER_ID,
                     date = Date(),
+                    messageType = Message.MessageType.RECEIVED,
                     messageStatus = MessageStatus.SUCCESS
                 )
 

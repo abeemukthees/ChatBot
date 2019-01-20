@@ -51,7 +51,7 @@ interface MessageDao {
     fun getMessages(chatBotId: Int): Observable<List<MessageEntity>>
 
     @Insert
-    fun insertMessage(messageEntity: MessageEntity)
+    fun insertMessage(messageEntity: MessageEntity): Long
 
     @Update
     fun updateMessage(messageEntity: MessageEntity)

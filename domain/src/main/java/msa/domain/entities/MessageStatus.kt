@@ -6,5 +6,5 @@ package msa.domain.entities
 
 enum class MessageStatus {
 
-    SUCCESS, FAILURE
+    SENDING, SUCCESS, FAILURE
 }

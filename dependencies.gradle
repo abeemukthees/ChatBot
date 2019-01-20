@@ -28,7 +28,7 @@ ext.versions = [
 
 
         androidx                    : '1.0.0',
-        constraintLayout            : '1.1.2',
+        constraintLayout            : '2.0.0-alpha3',
         viewModel                   : '2.0.0-rc01',
         workManagerVersion          : '1.0.0-alpha10',
         navigationVersion           : '1.0.0-alpha07',
